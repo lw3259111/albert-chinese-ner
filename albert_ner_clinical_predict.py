@@ -234,6 +234,10 @@ class NerProcessor(DataProcessor):
     return self._create_example(
       self._read_data(os.path.join(data_dir, "test.txt")), "test")
 
+  def get_predict_examples(self,text):
+      data = list(text)
+      labels = ["O"] *len(data)
+      return self._create_example([labels,data])
 
   def get_labels(self):
     # return ["O", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC", "[CLS]","[SEP]"]
@@ -812,7 +816,6 @@ def main(_):
     if os.path.exists(token_path):
       os.remove(token_path)
     predict_examples = processor.get_test_examples(FLAGS.data_dir)
-
     predict_file = os.path.join(FLAGS.output_dir, "predict.tf_record")
     file_based_convert_examples_to_features(predict_examples, label_list,
                                             FLAGS.max_seq_length, tokenizer,
@@ -839,6 +842,28 @@ def main(_):
         output_line = "\n".join(id2label[id] for id in prediction if id!=0) + "\n"
         writer.write(output_line)
 
+    #-- new predict --#
+    tmp_result_file = "/tmp/tmp_predict.tf_record"
+    text = "有可能得了艾滋病"
+    predict_examples_ = processor.get_predict_examples(text)
+    file_based_convert_examples_to_features(predict_examples_, label_list,
+                                            FLAGS.max_seq_length, tokenizer,
+                                            tmp_result_file, mode="test")
+    tf.logging.info("***** Running prediction*****")
+    tf.logging.info("  Num examples = %d", len(predict_examples_))
+    tf.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
+    predict_input_fn_ = file_based_input_fn_builder(
+        input_file=tmp_result_file,
+        seq_length=FLAGS.max_seq_length,
+        is_training=False,
+        drop_remainder=predict_drop_remainder)
+
+    result_ = estimator.predict(input_fn=predict_input_fn_)
+    output_predict_file_ = os.path.join(FLAGS.output_dir, "label_test_predict.txt")
+    with open(output_predict_file_, 'w') as writer:
+        for prediction in result_:
+            output_line = "\n".join(id2label[id] for id in prediction if id != 0) + "\n"
+            writer.write(output_line)
 
 if __name__ == "__main__":
   flags.mark_flag_as_required("data_dir")
