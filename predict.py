@@ -5,7 +5,7 @@ from albert_ner_clinical_predict import file_based_convert_examples_to_features
 from albert_ner_clinical_predict import NerProcessor,file_based_input_fn_builder,model_fn_builder
 import tensorflow as tf
 import modeling
-bert_config_file = "albert_config/albert_config_base.json"
+bert_config_file = "albert_base_zh/albert_config_base.json"
 init_checkpoint = "albert_base_zh/albert_model.ckpt"
 
 
