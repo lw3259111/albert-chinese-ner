@@ -109,9 +109,8 @@ class predictModel:
             os.remove(tmp_result_file)
 
         predict_examples_ = self.processor.get_predict_examples(text)
-        tokens = ["[CLS"]
-        tokens.append(list(text))
-        tokens.append("[SEP]")
+
+        tokens = ["[CLS]"] + list(text) + ["[SEP]"]
         file_based_convert_examples_to_features(predict_examples_, self.label_list,
                                                 self.max_seq_length, self.tokenizer,
                                                 tmp_result_file, mode="test")
