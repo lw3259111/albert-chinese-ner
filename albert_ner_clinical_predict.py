@@ -855,7 +855,6 @@ def main(_):
         drop_remainder=predict_drop_remainder)
 
     result_ = estimator.predict(input_fn=predict_input_fn_)
-    print(result_,'fafsfadsfads')
     output_predict_file_ = os.path.join(FLAGS.output_dir, "label_test_predict.txt")
     with open(output_predict_file_, 'w') as writer:
         for prediction in result_:
