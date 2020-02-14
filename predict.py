@@ -81,3 +81,7 @@ def predict(text,model_dir,do_lower_case=True,max_seq_length=128,
             if id != 0:
                 target.append(id2label[id])
     return target
+
+if __name__ == "__main__":
+    text = "有可能得了艾滋病"
+    predict(text)
