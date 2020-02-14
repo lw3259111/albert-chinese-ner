@@ -237,7 +237,7 @@ class NerProcessor(DataProcessor):
   def get_predict_examples(self,text):
       data = list(text)
       labels = ["O"] *len(data)
-      return self._create_example([labels,data],'test')
+      return self._create_example([" ".join(labels) , " ".join(data)],'test')
 
   def get_labels(self):
     # return ["O", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC", "[CLS]","[SEP]"]
