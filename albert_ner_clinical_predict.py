@@ -269,8 +269,6 @@ def convert_single_example(ex_index, example, label_map, max_seq_length, tokeniz
   labellist = example.label.split(' ')
   tokens = []
   labels = []
-  print(textlist)
-  print(labellist)
   for i, word in enumerate(textlist):
     token = tokenizer.tokenize(word)
     tokens.extend(token)
@@ -352,7 +350,7 @@ def file_based_convert_examples_to_features(
     pickle.dump(label_map,w)
 
   writer = tf.python_io.TFRecordWriter(output_file)
-
+  print(examples)
   for (ex_index, example) in enumerate(examples):
     if ex_index % 10000 == 0:
       tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
