@@ -5,6 +5,7 @@ from albert_ner_clinical_predict import file_based_convert_examples_to_features
 from albert_ner_clinical_predict import NerProcessor,file_based_input_fn_builder,model_fn_builder
 import tensorflow as tf
 import modeling
+from collections import defaultdict
 bert_config_file = "albert_base_zh/albert_config_base.json"
 init_checkpoint = "albert_base_zh/albert_model.ckpt"
 
@@ -72,6 +73,35 @@ class predictModel:
             label2id = pickle.load(rf)
             self.id2label = {value: key for key, value in label2id.items()}
 
+    def label2entity(self,tokens, targets):
+        suffix2name = {
+            'DISEASE': '疾病',
+            'SIGNS': '症状',
+            'TREATMENT': '治疗方式',
+            "BODY":"身体部位",
+            "CHECK":"检查方式"
+        }
+        name2entities = defaultdict(list)
+        entity, last_suffix = None, None
+        for char, label in zip(tokens, targets):
+            if '-' in label:
+                prefix, suffix = label.split('-')
+                if prefix == 'B':
+                    if last_suffix and entity:
+                        name2entities[suffix2name[last_suffix]].append(entity)
+                    entity, last_suffix = char, suffix
+                else:
+                    if suffix == last_suffix and entity:
+                        entity += char
+                    else:
+                        entity, last_suffix = None, None
+            else:
+                if last_suffix and entity:
+                    name2entities[suffix2name[last_suffix]].append(entity)
+                entity, last_suffix = None, None
+
+        return name2entities
+
     def predict(self,text):
         predict_drop_remainder = False
         tmp_result_file = "/tmp/tmp_predict.tf_record"
@@ -79,6 +109,9 @@ class predictModel:
             os.remove(tmp_result_file)
 
         predict_examples_ = self.processor.get_predict_examples(text)
+        tokens = ["[CLS"]
+        tokens.append(list(text))
+        tokens.append("[SEP]")
         file_based_convert_examples_to_features(predict_examples_, self.label_list,
                                                 self.max_seq_length, self.tokenizer,
                                                 tmp_result_file, mode="test")
@@ -97,7 +130,9 @@ class predictModel:
             for id in prediction:
                 if id != 0:
                     target.append(self.id2label[id])
-        return target
+
+
+        return target,tokens
 
 
 def predict(text,model_dir,do_lower_case=True,max_seq_length=128,

@@ -260,7 +260,7 @@ def write_tokens(tokens,mode):
     output_dir = "./"
   if mode=="test":
     path = os.path.join(output_dir, "token_"+mode+".txt")
-    wf = open(path,'a')
+    wf = open(path,'w')
     for token in tokens:
       if token!="**NULL**":
         wf.write(token+'\n')
