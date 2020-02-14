@@ -259,7 +259,7 @@ def write_tokens(tokens,mode):
   if not FLAGS.output_dir:
     output_dir = "./"
   if mode=="test":
-    path = os.path.join(FLAGS.output_dir, "token_"+mode+".txt")
+    path = os.path.join(output_dir, "token_"+mode+".txt")
     wf = open(path,'a')
     for token in tokens:
       if token!="**NULL**":
