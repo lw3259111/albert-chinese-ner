@@ -269,13 +269,12 @@ def convert_single_example(ex_index, example, label_map, max_seq_length, tokeniz
   labellist = example.label.split(' ')
   tokens = []
   labels = []
-  # print(textlist)
+  print(textlist)
+  print(labellist)
   for i, word in enumerate(textlist):
     token = tokenizer.tokenize(word)
-    print(token)
     tokens.extend(token)
     label_1 = labellist[i]
-    print(label_1)
     for m in range(len(token)):
       if m == 0:
         labels.append(label_1)
@@ -348,7 +347,7 @@ def file_based_convert_examples_to_features(
   label_map = {}
   for (i, label) in enumerate(label_list,1):
     label_map[label] = i
-  print(label_map)
+
   with open('albert_base_ner_checkpoints/label2id.pkl','wb') as w:
     pickle.dump(label_map,w)
 
