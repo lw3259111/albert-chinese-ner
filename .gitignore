@@ -1,0 +1,7 @@
+__pycache__
+albert_base_ner_checkpoints
+.idea
+albert_base_zh
+albert_large_zh
+data/
+albert_large_zh.zip
