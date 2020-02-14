@@ -350,7 +350,6 @@ def file_based_convert_examples_to_features(
     pickle.dump(label_map,w)
 
   writer = tf.python_io.TFRecordWriter(output_file)
-  print(examples)
   for (ex_index, example) in enumerate(examples):
     if ex_index % 10000 == 0:
       tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
@@ -856,7 +855,7 @@ def main(_):
         drop_remainder=predict_drop_remainder)
 
     result_ = estimator.predict(input_fn=predict_input_fn_)
-    print(result_)
+    print(result_,'fafsfadsfads')
     output_predict_file_ = os.path.join(FLAGS.output_dir, "label_test_predict.txt")
     with open(output_predict_file_, 'w') as writer:
         for prediction in result_:
