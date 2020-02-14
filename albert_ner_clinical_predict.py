@@ -293,7 +293,7 @@ def convert_single_example(ex_index, example, label_map, max_seq_length, tokeniz
   segment_ids.append(0)
   # append("O") or append("[CLS]") not sure!
   label_ids.append(label_map["[CLS]"])
-  #print(len(labels),"\n".join(labels),len(tokens),"\n".join(tokens),'fasdf')
+  print(len(labels),"\n".join(labels),len(tokens),"\n".join(tokens),'fasdf')
   for i, token in enumerate(tokens):
     ntokens.append(token)
     segment_ids.append(0)
