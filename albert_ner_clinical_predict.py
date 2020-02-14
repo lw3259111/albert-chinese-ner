@@ -335,7 +335,7 @@ def convert_single_example(ex_index, example, label_map, max_seq_length, tokeniz
     label_ids=label_ids,
     #label_mask = label_mask
   )
-  write_tokens(ntokens,mode)
+  # write_tokens(ntokens,mode)
   return feature
 
 
