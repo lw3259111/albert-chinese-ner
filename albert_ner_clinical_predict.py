@@ -857,10 +857,14 @@ def main(_):
 
     result_ = estimator.predict(input_fn=predict_input_fn_)
     output_predict_file_ = os.path.join(FLAGS.output_dir, "label_test_predict.txt")
+    result_ = [r for r in result_ if r not in ["[CLS]","[SEP]",0]]
+    text_list = list(text)
     with open(output_predict_file_, 'w') as writer:
-        for prediction in result_:
-            output_line = "\n".join(id2label[id] for id in prediction if id != 0) + "\n"
+        for index,prediction in enumerate(result_):
+
+            output_line = "\n".join(text_list[i]+" "+id2label[prediction[i]] for i in range(len(prediction))) + "\n"
             writer.write(output_line)
+
 
 if __name__ == "__main__":
   flags.mark_flag_as_required("data_dir")
