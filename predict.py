@@ -178,4 +178,7 @@ def predict(text,model_dir,do_lower_case=True,max_seq_length=128,
 
 if __name__ == "__main__":
     text = "有可能得了艾滋病"
-    print(predict(text,model_dir="albert_base_ner_checkpoints/"))
+    model_dir = "albert_base_ner_checkpoints/"
+    print(predict(text,model_dir=model_dir))
+    model = predictModel(model_dir=model_dir)
+    print(model.predict(text))
